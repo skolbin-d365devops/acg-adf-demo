@@ -25,12 +25,12 @@
 						"referenceName": "acg_adf_demo_storage_curated_ds",
 						"type": "DatasetReference"
 					},
-					"name": "sink1"
+					"name": "sinkAll"
 				}
 			],
 			"transformations": [
 				{
-					"name": "union1"
+					"name": "union"
 				}
 			],
 			"scriptLines": [
@@ -71,13 +71,13 @@
 				"     validateSchema: false,",
 				"     ignoreNoFilesFound: false) ~> curatedSql",
 				"oahuStatePublicParkingLots, curatedSql union(byName: true,",
-				"     partitionBy('hash', 1))~> union1",
-				"union1 sink(allowSchemaDrift: true,",
+				"     partitionBy('hash', 1))~> union",
+				"union sink(allowSchemaDrift: true,",
 				"     validateSchema: false,",
 				"     partitionFileNames:['results.csv'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
-				"     partitionBy('hash', 1)) ~> sink1"
+				"     partitionBy('hash', 1)) ~> sinkAll"
 			]
 		}
 	}
