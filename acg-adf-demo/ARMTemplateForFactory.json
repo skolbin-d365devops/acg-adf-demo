@@ -80,6 +80,44 @@
 								"parameters": {}
 							}
 						]
+					},
+					{
+						"name": "acg_adf_demo_df",
+						"type": "ExecuteDataFlow",
+						"dependsOn": [
+							{
+								"activity": "Copy Sales Addresses",
+								"dependencyConditions": [
+									"Completed"
+								]
+							}
+						],
+						"policy": {
+							"timeout": "1.00:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataflow": {
+								"referenceName": "acg_adf_demo_df",
+								"type": "DataFlowReference",
+								"parameters": {},
+								"datasetParameters": {
+									"oahuStatePublicParkingLots": {},
+									"curatedSql": {},
+									"sinkAll": {}
+								}
+							},
+							"staging": {},
+							"compute": {
+								"coreCount": 8,
+								"computeType": "General"
+							},
+							"traceLevel": "Fine"
+						}
 					}
 				],
 				"policy": {
@@ -90,7 +128,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/acg_adf_demo_asql_ds')]",
-				"[concat(variables('factoryId'), '/datasets/acg_adf_demo_storage_raw_ds')]"
+				"[concat(variables('factoryId'), '/datasets/acg_adf_demo_storage_raw_ds')]",
+				"[concat(variables('factoryId'), '/dataflows/acg_adf_demo_df')]"
 			]
 		},
 		{
@@ -209,6 +248,73 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/oahu')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "acg_adf_demo_storage",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"fileName": "oahu-state-public-parking-lots-csv.csv",
+						"container": "raw"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					},
+					{
+						"type": "String"
+					}
+				]
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/acg_adf_demo_storage')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/oahu_state_public_parking_lots_ds')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
@@ -314,6 +420,97 @@
 				}
 			},
 			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/acg_adf_demo_df')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"dataset": {
+								"referenceName": "oahu_state_public_parking_lots_ds",
+								"type": "DatasetReference"
+							},
+							"name": "oahuStatePublicParkingLots"
+						},
+						{
+							"dataset": {
+								"referenceName": "oahu",
+								"type": "DatasetReference"
+							},
+							"name": "curatedSql"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "acg_adf_demo_storage_curated_ds",
+								"type": "DatasetReference"
+							},
+							"name": "sinkAll"
+						}
+					],
+					"transformations": [
+						{
+							"name": "union"
+						}
+					],
+					"scriptLines": [
+						"source(output(",
+						"          Lot as string,",
+						"          Name as string,",
+						"          {Second Entrance/Cross Street} as string,",
+						"          Island as string,",
+						"          Stalls as string,",
+						"          Type as string,",
+						"          Payment as string,",
+						"          Rates as string,",
+						"          {Rate Limit} as string,",
+						"          Address as string,",
+						"          Latititude as string,",
+						"          Longitidue as string,",
+						"          GeoJSON as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> oahuStatePublicParkingLots",
+						"source(output(",
+						"          Column_1 as string,",
+						"          Column_2 as string,",
+						"          Column_3 as string,",
+						"          Column_4 as string,",
+						"          Column_5 as string,",
+						"          Column_6 as string,",
+						"          Column_7 as string,",
+						"          Column_8 as string,",
+						"          Column_9 as string,",
+						"          Column_10 as string,",
+						"          Column_11 as string,",
+						"          Column_12 as string,",
+						"          Column_13 as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false) ~> curatedSql",
+						"oahuStatePublicParkingLots, curatedSql union(byName: true,",
+						"     partitionBy('hash', 1))~> union",
+						"union sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     partitionFileNames:['results.csv'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     partitionBy('hash', 1)) ~> sinkAll"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/oahu_state_public_parking_lots_ds')]",
+				"[concat(variables('factoryId'), '/datasets/oahu')]",
+				"[concat(variables('factoryId'), '/datasets/acg_adf_demo_storage_curated_ds')]"
+			]
 		}
 	]
 }
