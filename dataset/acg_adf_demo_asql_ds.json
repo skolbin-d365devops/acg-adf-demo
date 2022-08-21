@@ -1,5 +1,5 @@
 {
-	"name": "acg_adf_demo_asql",
+	"name": "acg_adf_demo_asql_ds",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "acg_adf_demo_asql",
