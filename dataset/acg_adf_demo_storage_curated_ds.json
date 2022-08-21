@@ -1,0 +1,22 @@
+{
+	"name": "acg_adf_demo_storage_curated_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "acg_adf_demo_storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"container": "curated"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": []
+	}
+}
