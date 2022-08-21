@@ -1,5 +1,5 @@
 {
-	"name": "dataflow1",
+	"name": "acg_adf_demo_df",
 	"properties": {
 		"type": "MappingDataFlow",
 		"typeProperties": {
