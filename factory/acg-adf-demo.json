@@ -1,0 +1,9 @@
+{
+	"name": "acg-adf-demo",
+	"location": "westus3",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "55a48f26-2ba1-44e2-9743-6cf70a92d7f9",
+		"tenantId": "775eab64-eaca-4fb2-aeb1-6272f639ff63"
+	}
+}
