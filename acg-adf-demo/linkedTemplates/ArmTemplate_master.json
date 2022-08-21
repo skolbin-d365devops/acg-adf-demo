@@ -11,6 +11,10 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'acg_adf_demo_asql'"
 		},
+		"acg_adf_demo_storage_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'acg_adf_demo_storage'"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -40,6 +44,9 @@
 					},
 					"acg_adf_demo_asql_connectionString": {
 						"value": "[parameters('acg_adf_demo_asql_connectionString')]"
+					},
+					"acg_adf_demo_storage_connectionString": {
+						"value": "[parameters('acg_adf_demo_storage_connectionString')]"
 					}
 				}
 			},

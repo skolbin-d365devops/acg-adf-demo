@@ -8,6 +8,9 @@
 		"acg_adf_demo_asql_connectionString": {
 			"value": ""
 		},
+		"acg_adf_demo_storage_connectionString": {
+			"value": ""
+		},
 		"containerUri": {
 			"value": ""
 		},
