@@ -1,0 +1,76 @@
+{
+	"name": "oahu_state_public_parking_lots_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "acg_adf_demo_storage",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobStorageLocation",
+				"fileName": "oahu-state-public-parking-lots-csv.csv",
+				"container": "raw"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"firstRowAsHeader": true,
+			"quoteChar": "\""
+		},
+		"schema": [
+			{
+				"name": "Lot",
+				"type": "String"
+			},
+			{
+				"name": "Name",
+				"type": "String"
+			},
+			{
+				"name": "Second Entrance/Cross Street",
+				"type": "String"
+			},
+			{
+				"name": "Island",
+				"type": "String"
+			},
+			{
+				"name": "Stalls",
+				"type": "String"
+			},
+			{
+				"name": "Type",
+				"type": "String"
+			},
+			{
+				"name": "Payment",
+				"type": "String"
+			},
+			{
+				"name": "Rates",
+				"type": "String"
+			},
+			{
+				"name": "Rate Limit",
+				"type": "String"
+			},
+			{
+				"name": "Address",
+				"type": "String"
+			},
+			{
+				"name": "Latititude",
+				"type": "String"
+			},
+			{
+				"name": "Longitidue",
+				"type": "String"
+			},
+			{
+				"name": "GeoJSON",
+				"type": "String"
+			}
+		]
+	}
+}
